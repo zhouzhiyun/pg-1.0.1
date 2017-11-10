@@ -25,8 +25,13 @@
             </el-aside>
             <el-container class="h-100">
                 <el-header style="text-align: right; font-size: 12px">
-                    <span style="margin-right:10px;">王小虎</span>
-                    <el-button @click="close" size="mini" type="danger">退出登录</el-button>                    
+                    <el-dropdown @command="handleCommand">
+                        <i class="el-icon-setting" style="margin-right: 15px"></i>
+                        <el-dropdown-menu slot="dropdown" >
+                            <el-dropdown-item command="exit">退出登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <span>王小虎</span>                
                 </el-header>
                 <el-main>
                     <component :is="tab"></component>
@@ -64,9 +69,21 @@ export default {
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       },
-      close(){
-          console.log('ssss');
-          this.$router.push({name:'Login'});
+      handleCommand(command){
+         if(command=='exit'){
+             this.$confirm(' 是否退出登录继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {                
+                this.$message({
+                    type: 'success',
+                    message: '成功退出登录!'
+                });
+                this.$router.push({name:'Login'});
+            }).catch(() => {          
+            });
+         }
       }
   },
   components:{
